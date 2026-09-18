@@ -1,0 +1,256 @@
+{
+  "gerado": "2026-09-18T17:15:30.604Z",
+  "modelo": "gemini-3.1-flash-lite-preview",
+  "gravacao": {
+    "arquivo": "WhatsApp Video 2026-09-18 at 10.40.52.mp4",
+    "duracao": 63,
+    "largura": 1092,
+    "altura": 614,
+    "temAudio": true
+  },
+  "amostragem": {
+    "quadrosEnviados": 4,
+    "quadrosAmostrados": 7,
+    "trocasDeCena": 7,
+    "orcamento": 14
+  },
+  "assinatura": {
+    "nome": "lector",
+    "tolerancia": 0.1,
+    "dentro": 3,
+    "desvios": 4
+  },
+  "observacoes": [
+    {
+      "instante": 2.8,
+      "tela_app": "",
+      "tela_url": "",
+      "tela_categoria": "sistema",
+      "tela_descricao": "O usuário está com o software OBS Studio aberto, configurando fontes de captura de tela.",
+      "camera_visivel": true,
+      "camera_pessoas": 1,
+      "camera_olhando_para_tela": true,
+      "camera_dispositivo_visivel": false,
+      "camera_observacao": "O candidato está olhando para a tela.",
+      "confianca": 1
+    },
+    {
+      "instante": 41.7,
+      "tela_app": "",
+      "tela_url": "",
+      "tela_categoria": "busca",
+      "tela_descricao": "Navegador aberto em uma nova guia em branco.",
+      "camera_visivel": true,
+      "camera_pessoas": 1,
+      "camera_olhando_para_tela": true,
+      "camera_dispositivo_visivel": false,
+      "camera_observacao": "O candidato está olhando para a tela.",
+      "confianca": 1,
+      "abas_visiveis": [
+        "Nova guia"
+      ]
+    },
+    {
+      "instante": 47.4,
+      "tela_app": "ChatGPT",
+      "tela_url": "",
+      "tela_categoria": "ia",
+      "tela_descricao": "Página inicial do ChatGPT aberta.",
+      "camera_visivel": true,
+      "camera_pessoas": 1,
+      "camera_olhando_para_tela": true,
+      "camera_dispositivo_visivel": false,
+      "camera_observacao": "O candidato está olhando para a tela.",
+      "confianca": 1,
+      "abas_visiveis": [
+        "ChatGPT: Chat, Work, Create &"
+      ]
+    },
+    {
+      "instante": 59.7,
+      "tela_app": "ChatGPT",
+      "tela_url": "",
+      "tela_categoria": "ia",
+      "tela_descricao": "Interface do ChatGPT com uma conversa ativa e um prompt de texto visível.",
+      "camera_visivel": true,
+      "camera_pessoas": 1,
+      "camera_olhando_para_tela": true,
+      "camera_dispositivo_visivel": false,
+      "camera_observacao": "O candidato está olhando para a tela com a mão no rosto.",
+      "confianca": 1,
+      "abas_visiveis": [
+        "Responder enunciado"
+      ]
+    },
+    {
+      "instante": 17.8,
+      "tela_app": "lector",
+      "tela_url": "",
+      "tela_categoria": "prova",
+      "tela_descricao": "A tela corresponde à assinatura “lector” (distância 0.0086).",
+      "abas_visiveis": [],
+      "camera_visivel": false,
+      "camera_pessoas": 1,
+      "camera_olhando_para_tela": true,
+      "camera_dispositivo_visivel": false,
+      "camera_observacao": "",
+      "confianca": 0.96,
+      "porAssinatura": true
+    },
+    {
+      "instante": 32.8,
+      "tela_app": "lector",
+      "tela_url": "",
+      "tela_categoria": "prova",
+      "tela_descricao": "A tela corresponde à assinatura “lector” (distância 0.0086).",
+      "abas_visiveis": [],
+      "camera_visivel": false,
+      "camera_pessoas": 1,
+      "camera_olhando_para_tela": true,
+      "camera_dispositivo_visivel": false,
+      "camera_observacao": "",
+      "confianca": 0.96,
+      "porAssinatura": true
+    },
+    {
+      "instante": 44.2,
+      "tela_app": "lector",
+      "tela_url": "",
+      "tela_categoria": "prova",
+      "tela_descricao": "A tela corresponde à assinatura “lector” (distância 0.0434).",
+      "abas_visiveis": [],
+      "camera_visivel": false,
+      "camera_pessoas": 1,
+      "camera_olhando_para_tela": true,
+      "camera_dispositivo_visivel": false,
+      "camera_observacao": "",
+      "confianca": 0.78,
+      "porAssinatura": true
+    }
+  ],
+  "origem": "pipeline",
+  "referenciaCamera": {
+    "yaw": 0.031,
+    "pitch": 0.612,
+    "madYaw": 0.024,
+    "madPitch": 0.018000000000000016,
+    "amostras": 32,
+    "mads": 6
+  },
+  "fundoVirtual": {
+    "virtual": false,
+    "variacao": 2.23,
+    "limiar": 1,
+    "amostras": 5
+  },
+  "metricas": {
+    "total": 5,
+    "paraRevisar": 2,
+    "porNivel": {
+      "alta": 1,
+      "revisar": 1,
+      "atencao": 0,
+      "informacao": 3
+    },
+    "porLane": {
+      "tela": 5,
+      "camera": 0,
+      "audio": 0
+    }
+  },
+  "resumo": "Em 1min de gravação a análise separou 5 eventos, 2 deles pedem revisão. Fora da plataforma da prova a gravação mostra Mecanismo de busca e ChatGPT. A sequência mais densa está entre 0:00:42 e 0:01:03: 3 trocas de contexto em 21s.",
+  "eventos": [
+    {
+      "id": "t01",
+      "t": 3,
+      "duracao": 15,
+      "lane": "tela",
+      "categoria": "sistema",
+      "nivel": "informacao",
+      "titulo": "Aplicativo do sistema",
+      "observado": "O usuário está com o software OBS Studio aberto, configurando fontes de captura de tela.",
+      "significado": "Ajuste de ambiente ou aplicativo do sistema. Sem relação aparente com o conteúdo da avaliação.",
+      "fonte": "Quadro da gravação de tela, 0:00:02",
+      "confianca": 1,
+      "clipeInicio": 0,
+      "poster": "quadros/q0000028.jpg",
+      "clipe": "evidencia/t01.mp4"
+    },
+    {
+      "id": "t02",
+      "t": 18,
+      "duracao": 24,
+      "lane": "tela",
+      "categoria": "prova",
+      "nivel": "informacao",
+      "titulo": "Lector em primeiro plano",
+      "observado": "A tela corresponde à assinatura “lector” (distância 0.0086).",
+      "significado": "A própria plataforma de avaliação em primeiro plano.",
+      "fonte": "Quadro da gravação de tela, 0:00:17",
+      "confianca": 0.96,
+      "clipeInicio": 11,
+      "poster": "quadros/q0000178.jpg",
+      "clipe": "evidencia/t02.mp4"
+    },
+    {
+      "id": "t03",
+      "t": 42,
+      "duracao": 5,
+      "lane": "tela",
+      "categoria": "busca",
+      "nivel": "revisar",
+      "titulo": "Mecanismo de busca",
+      "observado": "Navegador aberto em uma nova guia em branco.",
+      "significado": "Busca externa durante a prova. Verifique no trecho se o termo pesquisado se relaciona ao conteúdo avaliado.",
+      "fonte": "Quadro da gravação de tela, 0:00:41",
+      "confianca": 1,
+      "clipeInicio": 35,
+      "cluster": "s1",
+      "poster": "quadros/q0000417.jpg",
+      "clipe": "evidencia/t03.mp4"
+    },
+    {
+      "id": "t04",
+      "t": 44,
+      "duracao": 5,
+      "lane": "tela",
+      "categoria": "prova",
+      "nivel": "informacao",
+      "titulo": "Lector em primeiro plano",
+      "observado": "A tela corresponde à assinatura “lector” (distância 0.0434).",
+      "significado": "A própria plataforma de avaliação em primeiro plano.",
+      "fonte": "Quadro da gravação de tela, 0:00:44",
+      "confianca": 0.78,
+      "clipeInicio": 37,
+      "cluster": "s1",
+      "poster": "quadros/q0000442.jpg",
+      "clipe": "evidencia/t04.mp4"
+    },
+    {
+      "id": "t05",
+      "t": 47,
+      "duracao": 16,
+      "lane": "tela",
+      "categoria": "ia",
+      "nivel": "alta",
+      "titulo": "ChatGPT em primeiro plano",
+      "observado": "Página inicial do ChatGPT aberta.",
+      "significado": "Ferramenta de IA conversacional em primeiro plano durante a prova. A gravação não liga esse uso a nenhuma questão específica.",
+      "fonte": "Quadro da gravação de tela, 0:00:47",
+      "confianca": 1,
+      "clipeInicio": 40,
+      "cluster": "s1",
+      "poster": "quadros/q0000474.jpg",
+      "clipe": "evidencia/t05.mp4"
+    }
+  ],
+  "clusters": [
+    {
+      "id": "s1",
+      "inicio": 42,
+      "fim": 63,
+      "titulo": "3 trocas de contexto em 21s",
+      "resumo": "Entre 0:00:42 e 0:01:03 a gravação passa por Mecanismo de busca, Lector em primeiro plano, ChatGPT em primeiro plano."
+    }
+  ]
+}

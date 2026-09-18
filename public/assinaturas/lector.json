@@ -1,0 +1,16 @@
+{
+  "nome": "lector",
+  "criada": "2026-09-18T14:44:27.135Z",
+  "tolerancia": 0.1,
+  "quadrosUsados": 7,
+  "exemplares": [
+    {
+      "total": "f182800101000096",
+      "topo": "e1f1e4f0f0850080",
+      "corpo": "8080008101000001",
+      "brilho": 210,
+      "ocorrencias": 7,
+      "instante": 18
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "nome": "Certificação Especialista — Relatórios",
+  "instituicao": "Universidade Corporativa CIGAM",
+  "permitido": {
+    "consulta": "Documentação e wiki internas da instituição podem ser consultadas.",
+    "documento": "Material de estudo próprio pode ser consultado."
+  },
+  "proibido": {
+    "ia": "Ferramentas de IA conversacional não são permitidas nesta certificação.",
+    "busca": "Mecanismos de busca não são permitidos nesta certificação."
+  },
+  "neutro": {
+    "sistema": "Ajustes de ambiente não são avaliados."
+  },
+  "observacoes": "Prova supervisionada por avaliador em chamada de vídeo. A presença de uma segunda voz no áudio é esperada."
+}

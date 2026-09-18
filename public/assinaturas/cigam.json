@@ -1,0 +1,16 @@
+{
+  "nome": "cigam",
+  "criada": "2026-09-18T14:42:59.807Z",
+  "tolerancia": 0.1,
+  "quadrosUsados": 7,
+  "exemplares": [
+    {
+      "total": "80d17343430383a3",
+      "topo": "000000d5d4d0b0c4",
+      "corpo": "2363634343430303",
+      "brilho": 160,
+      "ocorrencias": 7,
+      "instante": 2700
+    }
+  ]
+}

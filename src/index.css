@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Archivo", "Inter", sans-serif;
+
+  /* Tema claro Lector */
+  --color-canvas: #F7F9FC;   /* fundo da página — neutral-50 do Lector */
+  --color-surface: #FFFFFF;  /* área de trabalho */
+  --color-tint: #EDF2F9;     /* faixa recuada */
+  --color-rule: #DFE7F1;     /* fios e divisões */
+  --color-ink: #071B3D;      /* texto primário */
+  --color-mute: #5B6B85;     /* texto secundário */
+  --color-calm: #2563EB;     /* interação — blue.500 do Lector */
+
+  /* O laranja institucional preenche; sobre fundo claro ele não alcança
+     4.5:1, então o texto laranja usa a variante escurecida. */
+  --color-signal: #FF7A1A;
+  --color-signal-ink: #A8460A;
+}
+
+:root { color-scheme: light; }
+
+html { -webkit-text-size-adjust: 100%; overflow-x: clip; }
+
+body {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  margin: 0;
+}
+
+/* O timecode é a espinha do produto: todo evento é endereçado por tempo.
+   Figuras tabulares mantêm a coluna alinhada sem recorrer a uma monoespaçada. */
+.tc {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+}
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.032em;
+  line-height: 0.98;
+}
+
+:where(a, button, [tabindex], input, textarea):focus-visible {
+  outline: 2px solid var(--color-calm);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Escala de atenção por peso, não por matiz.
+   Vermelho leria como veredicto; aqui o nível é prioridade de revisão. */
+.mk { position: absolute; top: 50%; translate: -50% -50%; }
+.mk-informacao { width: 2px; height: 10px; border-radius: 1px; background: var(--color-mute); opacity: .5; }
+.mk-atencao    { width: 9px;  height: 9px;  border-radius: 50%; border: 1.5px solid var(--color-signal); background: var(--color-surface); }
+.mk-revisar    { width: 9px;  height: 9px;  border-radius: 50%; background: var(--color-signal); }
+.mk-alta       { width: 11px; height: 11px; border-radius: 50%; background: var(--color-signal); box-shadow: 0 0 0 4px rgb(255 122 26 / .24); }
+
+.lane-track {
+  background: repeating-linear-gradient(
+    90deg, var(--color-rule) 0 1px, transparent 1px 100%
+  );
+  background-size: 8.333% 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}
