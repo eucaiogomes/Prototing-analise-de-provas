@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { Analise, Decisao, ItemManifesto, Lane, Nivel } from './data/tipos';
 import { carregarAnalise, carregarManifesto } from './lib/analises';
+import { acompanhar, criarJob, enviarGravacao, listarJobs, type Job } from './lib/jobs';
 import { Timeline } from './components/Timeline';
 import { EventList } from './components/EventList';
 import { EventDetail } from './components/EventDetail';
@@ -38,7 +39,11 @@ export default function App() {
 
   const [fase, setFase] = useState<Fase>('ocioso');
   const [progresso, setProgresso] = useState(0);
+  const [etapa, setEtapa] = useState('');
   const [arquivo, setArquivo] = useState<Arquivo | null>(null);
+  const [jobs, setJobs] = useState<Job[]>([]);
+  // Cancela o acompanhamento anterior quando outro envio começa ou a tela reinicia.
+  const pararRef = useRef<(() => void) | null>(null);
 
   const [sel, setSel] = useState<string>('');
   const [janela, setJanela] = useState({ inicio: 0, fim: 60 });
@@ -49,6 +54,16 @@ export default function App() {
   useEffect(() => {
     carregarManifesto().then(setManifesto).catch((e) => setErro(e.message));
   }, []);
+
+  /* A fila também é atualizada enquanto a tela está ociosa: um job que outro
+     navegador enviou, ou que o worker terminou agora, aparece sozinho. */
+  useEffect(() => {
+    if (fase !== 'ocioso') return;
+    const buscar = () => listarJobs().then(setJobs).catch(() => {});
+    buscar();
+    const id = setInterval(buscar, 8000);
+    return () => clearInterval(id);
+  }, [fase]);
 
   /* ?analise=<slug> abre um resultado direto, sem passar pelo envio.
      É o link que o revisor compartilha com quem precisa ver a mesma evidência. */
@@ -68,23 +83,6 @@ export default function App() {
       .catch((e) => setErro(e.message));
   }, []);
 
-  /* A varredura só avança depois que a análise já está em mãos.
-     O progresso vem do tempo decorrido, e não da contagem de ticks: o navegador
-     estrangula timers em aba de segundo plano e a barra ficaria parada. */
-  useEffect(() => {
-    if (fase !== 'analisando' || !analise) return;
-    const inicio = Date.now();
-    const total = 6000;
-    const id = setInterval(() => {
-      setProgresso(Math.min(100, ((Date.now() - inicio) / total) * 100));
-    }, 100);
-    return () => clearInterval(id);
-  }, [fase, analise]);
-
-  useEffect(() => {
-    if (fase === 'analisando' && progresso >= 100) setFase('concluido');
-  }, [fase, progresso]);
-
   const ev = useMemo(
     () => analise?.eventos.find((e) => e.id === sel) ?? analise?.eventos[0],
     [analise, sel]
@@ -98,11 +96,10 @@ export default function App() {
     [ev, analise]
   );
 
+  /** Carrega uma análise pronta — do repositório (slug) ou do Blob (URL). */
   async function abrir(escolhido: string, origem: Arquivo | null) {
     setErro(null);
     setArquivo(origem);
-    setProgresso(0);
-    setFase('analisando');
     try {
       const a = await carregarAnalise(escolhido);
       setAnalise(a);
@@ -112,6 +109,52 @@ export default function App() {
       setDecisoes({});
       setFiltro('todos');
       setSoRevisar(false);
+      setArquivo(origem ?? { nome: a.gravacao.arquivo, tamanho: 0 });
+      setProgresso(100);
+      setFase('concluido');
+    } catch (e) {
+      setErro((e as Error).message);
+      setFase('ocioso');
+    }
+  }
+
+  /**
+   * O caminho real: sobe o arquivo, cria o job e acompanha o worker.
+   *
+   * O envio ocupa os primeiros 20% da barra porque, numa gravação de 3h, ele é
+   * minutos de espera — fingir que é instantâneo deixaria a barra parada sem
+   * explicação. Os 80% restantes são o progresso que o worker reporta.
+   */
+  async function enviar(f: File) {
+    setErro(null);
+    setAnalise(null);
+    setArquivo({ nome: f.name, tamanho: f.size });
+    setProgresso(0);
+    setEtapa('Enviando a gravação');
+    setFase('analisando');
+
+    try {
+      const videoUrl = await enviarGravacao(f, (fracao) => {
+        setProgresso(fracao * 20);
+        setEtapa(`Enviando a gravação (${Math.round(fracao * 100)}%)`);
+      });
+
+      const job = await criarJob({ arquivo: f.name, tamanho: f.size, videoUrl });
+      setProgresso(20);
+      setEtapa('Na fila');
+
+      pararRef.current?.();
+      pararRef.current = acompanhar(job.id, (j) => {
+        setProgresso(20 + j.progresso * 0.8);
+        setEtapa(j.estado === 'pendente' ? 'Na fila, aguardando o worker' : j.etapa);
+        if (j.estado === 'concluido' && j.analiseUrl) {
+          abrir(j.analiseUrl, { nome: j.arquivo, tamanho: j.tamanho });
+        }
+        if (j.estado === 'erro') {
+          setErro(j.erro ?? 'A análise falhou.');
+          setFase('ocioso');
+        }
+      });
     } catch (e) {
       setErro((e as Error).message);
       setFase('ocioso');
@@ -131,8 +174,10 @@ export default function App() {
   }
 
   function reiniciar() {
+    pararRef.current?.();
     setFase('ocioso');
     setProgresso(0);
+    setEtapa('');
     setArquivo(null);
     setAnalise(null);
     setSlug('');
@@ -171,9 +216,14 @@ export default function App() {
         totalEventos={m?.total ?? 0}
         paraRevisar={m?.paraRevisar ?? 0}
         analises={manifesto}
+        jobs={jobs}
+        etapa={etapa}
         erro={erro}
-        onIniciar={(a) => abrir(manifesto[0]?.slug ?? '', a)}
+        onIniciar={enviar}
         onEscolher={(s) => abrir(s, null)}
+        onAbrirJob={(j) =>
+          j.analiseUrl && abrir(j.analiseUrl, { nome: j.arquivo, tamanho: j.tamanho })
+        }
         onReiniciar={reiniciar}
       />
 

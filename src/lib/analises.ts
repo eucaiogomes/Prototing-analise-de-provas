@@ -8,13 +8,24 @@ export async function carregarManifesto(): Promise<ItemManifesto[]> {
   return r.json();
 }
 
-export async function carregarAnalise(slug: string): Promise<Analise> {
-  const r = await fetch(`${RAIZ}/${slug}/analise.json`);
-  if (!r.ok) throw new Error(`Não foi possível ler a análise “${slug}” (${r.status}).`);
+/**
+ * Carrega uma análise por slug (as que vêm no repositório) ou por URL completa
+ * (as que o worker publicou no Blob).
+ */
+export async function carregarAnalise(origem: string): Promise<Analise> {
+  const url = /^https?:\/\//.test(origem) ? origem : `${RAIZ}/${origem}/analise.json`;
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(`Não foi possível ler a análise (${r.status}).`);
   return r.json();
 }
 
-/** Os caminhos de mídia no JSON são relativos à pasta da análise. */
+/**
+ * Resolve o caminho de uma mídia.
+ *
+ * O worker reescreve os caminhos para URLs do Blob antes de publicar, então o
+ * que chega aqui pode já ser absoluto — nesse caso passa direto.
+ */
 export function midia(slug: string, caminho?: string) {
-  return caminho ? `${RAIZ}/${slug}/${caminho}` : undefined;
+  if (!caminho) return undefined;
+  return /^https?:\/\//.test(caminho) ? caminho : `${RAIZ}/${slug}/${caminho}`;
 }
