@@ -112,7 +112,7 @@ export default async function handler(request: Request) {
       if (!job) return Response.json({ erro: 'Job não encontrado.' }, { status: 404 });
 
       for (const campo of ['estado', 'etapa', 'progresso', 'analiseUrl', 'erro'] as const) {
-        if (corpo[campo] !== undefined) (job as Record<string, unknown>)[campo] = corpo[campo];
+        if (corpo[campo] !== undefined) (job as unknown as Record<string, unknown>)[campo] = corpo[campo];
       }
       if (corpo.estado === 'processando' && !job.iniciado) job.iniciado = new Date().toISOString();
       if (corpo.estado === 'concluido' || corpo.estado === 'erro') {
