@@ -1,4 +1,5 @@
 import { handleUpload, type HandleUploadBody } from '@vercel/blob/client';
+import type { IncomingMessage, ServerResponse } from 'node:http';
 
 /**
  * Entrega ao navegador um token para subir o MP4 direto ao Blob.
@@ -6,9 +7,36 @@ import { handleUpload, type HandleUploadBody } from '@vercel/blob/client';
  * O arquivo não passa por aqui: função da Vercel aceita 4,5 MB de corpo e uma
  * gravação de 3h tem centenas de megabytes. O token é a única coisa que
  * trafega por esta rota.
+ *
+ * A Vercel pode entregar um IncomingMessage do Node (sem .json()) ou um
+ * Request da Web API dependendo do runtime. Este handler aceita os dois.
  */
-export default async function handler(request: Request) {
-  const body = (await request.json()) as HandleUploadBody;
+export default async function handler(req: Request | IncomingMessage, res?: ServerResponse) {
+  /* Normaliza para Web API Request caso receba IncomingMessage do Node.js */
+  let request: Request;
+  if (typeof (req as Request).json === 'function') {
+    request = req as Request;
+  } else {
+    const node = req as IncomingMessage;
+    const chunks: Buffer[] = [];
+    await new Promise<void>((resolve, reject) => {
+      node.on('data', (c: Buffer) => chunks.push(c));
+      node.on('end', resolve);
+      node.on('error', reject);
+    });
+    const rawBody = Buffer.concat(chunks);
+    const headers = new Headers();
+    for (const [k, v] of Object.entries(node.headers)) {
+      if (v) headers.set(k, Array.isArray(v) ? v.join(', ') : v);
+    }
+    request = new Request(`https://${node.headers.host}${node.url}`, {
+      method: node.method ?? 'POST',
+      headers,
+      body: rawBody,
+    });
+  }
+
+  const body = (await request.clone().json()) as HandleUploadBody;
 
   try {
     const resposta = await handleUpload({
